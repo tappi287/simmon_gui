@@ -1,0 +1,208 @@
+import logging
+import os
+from pathlib import Path
+
+from qtpy.QtCore import QTimer, QUrl, Qt
+from qtpy.QtGui import QIcon
+from qtpy.QtWidgets import QLabel, QMainWindow, QPushButton, QTabWidget, QTextBrowser, QWidget, QAction
+from sqlalchemy.event import listens_for
+from sqlalchemy.orm import Session
+
+from .addprofilemenu import AddProfileMenu
+from .expandable_widget import ExpandableWidget
+from .file_dialog import FileDialog
+from .guiutil import GenericMsgBox, remove_from_db
+from .log_view import LogViewerWindow
+from .optionsmenu import OptionsMenu
+from .profile import ProfileWidget
+from .quick_start import QuickStartTab
+from .watch_controller import WatcherController
+from ..import_export import ProfileImportExport
+from ..path_util import path_exists
+from ..ui_loader import SetupWidget
+from shared_modules.models import Profile
+from shared_modules.globals import get_current_modules_dir
+
+class SimmonUi(QMainWindow):
+    debounce_timer = QTimer()
+    debounce_timer.setInterval(300)
+    debounce_timer.setSingleShot(True)
+
+    watcher_update_trigger = QTimer()
+    watcher_update_trigger.setInterval(8000)
+    watcher_update_trigger.setSingleShot(True)
+
+    def __init__(self, app):
+        """
+
+        :param modules.app.SimmonApp app:
+        """
+        super(SimmonUi, self).__init__()
+        SetupWidget.from_ui_file(self, 'main.ui')
+        self.app = app
+        self.session = Session(app.db_engine)
+
+        # -- Add LogViewer --
+        self.actionLog: QAction
+        self.actionLog.triggered.connect(self.view_log)
+        self.actionAppLog: QAction
+        self.actionAppLog.triggered.connect(self.view_app_log)
+
+        # -- Import Profile --
+        self.actionImport: QAction
+        self.actionImport.triggered.connect(self.import_profile)
+
+        # -- Setup ProfileWidget --
+        self.profileTabWidget: QTabWidget
+        self.profileTabWidget.tabCloseRequested.connect(self.close_profile_tab)
+        self.add_profile_btn = QPushButton(QIcon(':main/add-24px.svg'), '', self)
+        self.add_profile_btn.setStatusTip('Add a new profile')
+        # self.add_profile_btn.released.connect(self.add_new_profile)
+        self.add_profile_menu = AddProfileMenu(self, self.add_profile_btn, self.add_new_profile)
+        self.profileTabWidget.setCornerWidget(self.add_profile_btn, Qt.TopLeftCorner)
+
+        # -- Setup Quick Start Widget --
+        self.quick_start = QuickStartTab(self)
+        self.profileTabWidget.addTab(self.quick_start, 'Quick Start')
+
+        # -- Setup Watchmen Widget --
+        self.watcherExpandBtn: QPushButton
+        self.watcher_expand_widget = ExpandableWidget(self.watcherWidget, self.watcherExpandBtn)
+
+        # -- Setup Watchmen Controller --
+        self.watcherWidget: QWidget
+        self.watcherStatusLabel: QLabel
+        self.watcherStatusText: QLabel
+        self.watcherStatusText.setStatusTip('Displays the status of the background service.')
+        self.watcherUpdateBtn: QPushButton
+        self.watcherUpdateBtn.setStatusTip('Request the background service to restart and re-read the database')
+        self.watcherStartBtn: QPushButton
+        self.watcherStartBtn.setStatusTip('Start the background Watchman service that executes your profiles')
+        self.watcherStopBtn: QPushButton
+        self.watcherStopBtn.setStatusTip('Exit the background Watchman service')
+
+        self.watch_controller = WatcherController(self, self.watcherStatusText, self.watcherUpdateBtn,
+                                                  self.watcherStartBtn, self.watcherStopBtn)
+        self.options_menu = OptionsMenu(self)
+        self.menuBar().addMenu(self.options_menu)
+
+        self.watcher_update_trigger.timeout.connect(self.update_watcher)
+
+        self.setWindowTitle(f'{self.app.applicationDisplayName()}')
+        self.create_widgets()
+
+        self.install_event()
+
+    def install_event(self):
+        """ Trigger Watcher updates from database commits inside the GUI """
+        @listens_for(self.app.db_engine, 'commit')
+        def listen(*args, **kwargs):
+            self.watcher_update_trigger.start()
+
+        logging.debug('Installed SQLAlchemy Event listener for commits.')
+
+    def update_watcher(self):
+        """ Tell Watcher to re-read database """
+        logging.debug('Watcher re-read triggered. Database updates detected.')
+        self.watch_controller.restart_watcher()
+
+    def ready(self):
+        """ Check if Ui was updated within last debounce interval or
+            start new debounce interval.
+
+            Stop button smashing.
+        """
+        if self.debounce_timer.isActive():
+            return False
+        self.debounce_timer.start()
+        return True
+
+    def refresh_profiles(self):
+        idx = self.profileTabWidget.count()
+
+        while idx:
+            idx -= 1
+
+            if self.profileTabWidget.widget(idx) != self.quick_start:
+                self.profileTabWidget.removeTab(idx)
+
+        self.create_widgets()
+
+    def close_profile_tab(self, index: int):
+        widget: ProfileWidget = self.profileTabWidget.widget(index)
+        if widget.ask_on_close():
+            self.profileTabWidget.removeTab(index)
+            widget.deleteLater()
+
+        if self.profileTabWidget.count() == 0:
+            # -- Create default profile --
+            self.add_new_profile()
+
+    def add_new_profile(self) -> None:
+        """ Add db entry and widget """
+        if self.ready():
+            self.add_profile_widget(self.add_db_profile_entry())
+
+    def add_db_profile_entry(self) -> Profile:
+        profile = Profile(name=f'Profile_{self.profileTabWidget.count():02d}')
+        self.session.add(profile)
+        self.session.commit()
+        return profile
+
+    def add_profile_widget(self, profile: Profile):
+        profile_widget = ProfileWidget(self, profile)
+        self.profileTabWidget.addTab(profile_widget, profile_widget.windowTitle())
+
+    def remove_db_profile_entry(self, profile_id: int) -> bool:
+        """
+        tasks = self.session.query(Task).filter_by(profile_id=profile_id)
+        conditions = list()
+
+        # - Remove associated Tasks
+        for task in tasks:
+            task_con = self.session.query(Condition).filter_by(task_id=task.id)
+            if task_con:
+                conditions += task_con
+            remove_from_db(self.session, Task, task.id)
+
+        # - Remove associated Conditions
+        for condition in conditions:
+            remove_from_db(self.session, Condition, condition.id)
+        """
+        return remove_from_db(self.session, Profile, profile_id)
+
+    def create_widgets(self):
+        for profile in self.session.query(Profile).all():
+            logging.info('Creating widget: %s', profile.name)
+            profile_widget = ProfileWidget(self, profile)
+            self.profileTabWidget.addTab(profile_widget, profile_widget.windowTitle())
+
+        if self.profileTabWidget.count() == 0:
+            # -- Create default profile --
+            self.add_new_profile()
+
+    def view_log(self):
+        log_view = LogViewerWindow(self)
+        log_view.show()
+
+    def view_app_log(self):
+        log_view = LogViewerWindow(self, display_watcher_log=False)
+        log_view.show()
+
+    def import_profile(self):
+        file = FileDialog.open_existing_file(self, directory=Path(os.path.expanduser('~')))
+        if not file:
+            return
+
+        m = GenericMsgBox(self, 'Error', f'Could not open file: {file}')
+
+        if path_exists(file):
+            if not ProfileImportExport.import_profile(Path(file)):
+                m.setText('Error while importing Profile!')
+                m.exec_()
+                return
+        else:
+            m.exec_()
+            return
+
+        self.refresh_profiles()

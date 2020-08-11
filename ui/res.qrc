@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="main">
+    <file>description-24px.svg</file>
+    <file>keyboard_arrow_down-24px.svg</file>
+    <file>keyboard_arrow_up-24px.svg</file>
+    <file>filter_none-24px.svg</file>
+    <file>call_split-24px.svg</file>
+    <file>widgets-24px.svg</file>
+    <file>sm_icon.png</file>
+    <file>delete-24px.svg</file>
+    <file>add-24px.svg</file>
+  </qresource>
+</RCC>

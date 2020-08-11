@@ -1,0 +1,199 @@
+{
+    "active": true,
+    "id": 2,
+    "name": "Racing_Example",
+    "processes": [
+        {
+            "executable": "AC2-Win64-Shipping.exe",
+            "id": 34,
+            "name": "Assetto Corsa Competizione - v4.22.3.0",
+            "notification_type": "Creation",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64",
+            "profile_id": 2
+        },
+        {
+            "executable": "AC2-Win64-Shipping.exe",
+            "id": 35,
+            "name": "Assetto Corsa Competizione - v4.22.3.0",
+            "notification_type": "Deletion",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64",
+            "profile_id": 2
+        },
+        {
+            "executable": "AMS2AVX.exe",
+            "id": 36,
+            "name": "Automobilista 2 - v1.0.1.2",
+            "notification_type": "Creation",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Automobilista 2",
+            "profile_id": 2
+        },
+        {
+            "executable": "AMS2AVX.exe",
+            "id": 37,
+            "name": "Automobilista 2 - v1.0.1.2",
+            "notification_type": "Deletion",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Automobilista 2",
+            "profile_id": 2
+        }
+    ],
+    "tasks": [
+        {
+            "active": true,
+            "allow_multiple_instances": true,
+            "command": "-c_exit",
+            "conditions": [
+                {
+                    "id": 10,
+                    "name": "ACC not running",
+                    "order": 0,
+                    "process": {
+                        "executable": "AC2-Win64-Shipping.exe",
+                        "id": 27,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64"
+                    },
+                    "process_id": 27,
+                    "running": false,
+                    "task_id": 8
+                },
+                {
+                    "id": 11,
+                    "name": "AMS2 not running",
+                    "order": 1,
+                    "process": {
+                        "executable": "AMS2AVX.exe",
+                        "id": 28,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Automobilista 2"
+                    },
+                    "process_id": 28,
+                    "running": false,
+                    "task_id": 8
+                }
+            ],
+            "cwd": "",
+            "gates": [
+                {
+                    "id": 5,
+                    "order": 0,
+                    "task_id": 8,
+                    "value": true
+                }
+            ],
+            "id": 8,
+            "name": "Close CrewChief",
+            "process": {
+                "executable": "CrewChiefV4.exe",
+                "id": 26,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\Britton IT Ltd\\CrewChiefV4"
+            },
+            "process_id": 26,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "-game AMS2 -skip_updates",
+            "conditions": [
+                {
+                    "id": 12,
+                    "name": "AMS2 is running",
+                    "order": 0,
+                    "process": {
+                        "executable": "AMS2AVX.exe",
+                        "id": 30,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Automobilista 2"
+                    },
+                    "process_id": 30,
+                    "running": true,
+                    "task_id": 9
+                }
+            ],
+            "cwd": "",
+            "gates": [],
+            "id": 9,
+            "name": "Start CrewChief AMS2",
+            "process": {
+                "executable": "CrewChiefV4.exe",
+                "id": 29,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\Britton IT Ltd\\CrewChiefV4"
+            },
+            "process_id": 29,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "-game ACC -skip_updates",
+            "conditions": [
+                {
+                    "id": 13,
+                    "name": "ACC is running",
+                    "order": 0,
+                    "process": {
+                        "executable": "AC2-Win64-Shipping.exe",
+                        "id": 32,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64"
+                    },
+                    "process_id": 32,
+                    "running": true,
+                    "task_id": 10
+                }
+            ],
+            "cwd": "",
+            "gates": [],
+            "id": 10,
+            "name": "Start CrewChief ACC",
+            "process": {
+                "executable": "CrewChiefV4.exe",
+                "id": 31,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\Britton IT Ltd\\CrewChiefV4"
+            },
+            "process_id": 31,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": false,
+            "allow_multiple_instances": false,
+            "command": "",
+            "conditions": [],
+            "cwd": "",
+            "gates": [],
+            "id": 11,
+            "name": "Start TrackIR",
+            "process": {
+                "executable": "TrackIR5.exe",
+                "id": 33,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\NaturalPoint\\TrackIR5"
+            },
+            "process_id": 33,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        }
+    ]
+}

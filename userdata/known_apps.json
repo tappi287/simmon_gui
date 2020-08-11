@@ -1,0 +1,34 @@
+{
+  "244210": {
+    "name": "Assetto Corsa",
+    "installdir": "assettocorsa",
+    "executable": "AssettoCorsa.exe",
+    "exe_sub_path": ""
+  },
+  "805550": {
+    "name": "Assetto Corsa Competizione",
+    "installdir": "Assetto Corsa Competizione",
+    "executable": "AC2-Win64-Shipping.exe",
+    "exe_sub_path": "AC2/Binaries/Win64/"
+  },
+  "365960": {
+    "name": "rFactor 2",
+    "installdir": "rFactor 2",
+    "executable": "rFactor2.exe",
+    "exe_sub_path": "Bin64/"
+  },
+  "1066890": {
+    "name": "Automobilista 2",
+    "installdir": "Automobilista 2",
+    "executable": "AMS2AVX.exe",
+    "exe_sub_path": ""
+  },
+  "CrewChiefV4": {
+    "name": "CrewChief v4",
+    "installdir": "",
+    "executable": "CrewChiefV4.exe",
+    "exe_sub_path": "",
+    "simmon_method": "find_crew_chief_location"
+  }
+}
+

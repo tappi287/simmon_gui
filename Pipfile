@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pyinstaller = {git = "https://github.com/pyinstaller/pyinstaller.git"}
+paramiko = "*"
+
+[packages]
+wmi = "*"
+pywin32 = "*"
+appdirs = "*"
+sqlalchemy = "*"
+alembic = "*"
+PySide2 = "*"
+qtpy = "*"
+
+[requires]
+python_version = "3.8"
