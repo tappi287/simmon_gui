@@ -11,7 +11,9 @@ simmon_files = [('license.txt', '.'),
                 ('ui/*.html', 'ui'),
                 ('migrate/*.*', 'migrate'),
                 ('migrate/versions/*.*', 'migrate/versions'),
-                ('alembic.ini', '.'),]
+                ('alembic.ini', '.'),
+                ('userdata/*.json', 'userdata'),
+                ]
 
 local_hooks = ['hooks']
 

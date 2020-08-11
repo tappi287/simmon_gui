@@ -12,7 +12,6 @@ from ui import gui_resource
 
 VERSION = '0.75b'
 
-# TODO: detect installed Software and add templates
 # TODO: try to stop processes with close/exit signal rather than terminating it
 
 
