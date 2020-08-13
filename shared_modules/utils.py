@@ -138,16 +138,19 @@ class CheckConditionsGated:
 
     @staticmethod
     def _check_condition_gate(a: bool, b: bool, gate: Gate) -> bool:
-        if gate.value:  # AND
+        if gate.value is True:  # AND
             if a and b:
                 return True
-        else:  # OR
+        elif gate.value is False:  # OR
             if a or b:
                 return True
         return False
 
     @classmethod
     def check_conditions(cls, conditions: List[bool], gates_ls: List[Gate]):
+        if len(conditions) == 1:
+            return conditions[0]
+
         condition_gate_ls = list()
         for idx, c in enumerate(conditions):
             if idx >= 1:

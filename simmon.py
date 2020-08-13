@@ -10,7 +10,7 @@ from shared_modules.migrate import db_engine, db_session
 from ui import gui_resource
 
 
-VERSION = '0.75b'
+VERSION = '0.76b'
 
 # TODO: try to stop processes with close/exit signal rather than terminating it
 
