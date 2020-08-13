@@ -4,8 +4,12 @@
 M$ Windows application profiler running in the background to tame Simulation gaming needs for racing or flight
 sims. Start any follow up application when the start of your Sim application is detected.
 
+<p align="center">
+    <img src="ui/screenshot_075.png" alt="Screenshot" width="600">
+</p>
+
 #### Usage
-- Download the installer
+- Download the <a href="https://github.com/tappi287/simmon_gui/releases">latest installer</a>
 - Start the app
 - Choose Options>Install Watchman as Windows logon task
 - Configure your profiles
