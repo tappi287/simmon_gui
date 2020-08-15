@@ -4,8 +4,8 @@ from pathlib import Path, WindowsPath
 from typing import Tuple
 
 from qtpy.QtGui import QColor, QIcon, QPalette, QPixmap
-from qtpy.QtWidgets import QMessageBox, QWidget
-from qtpy.QtCore import Property, QAbstractAnimation, QEasingCurve, QObject, QPropertyAnimation, Signal
+from qtpy.QtWidgets import QMessageBox, QPushButton, QWidget
+from qtpy.QtCore import Property, QAbstractAnimation, QEasingCurve, QObject, QPropertyAnimation, Signal, Slot
 from sqlalchemy.orm import Session
 
 from shared_modules.globals import get_current_modules_dir, UI_PATH
@@ -50,25 +50,50 @@ class ExecutableFields(QObject):
     executable_invalid = Signal()
     executable_valid = Signal()
 
-    def __init__(self, parent, db_base_class: Base, db_session: Session, db_id: int,
-                 path_line_edit, path_btn, executable, path):
+    def __init__(self, ui, parent, db_base_class: Base, db_session: Session, db_id: int,
+                 path_line_edit, path_btn, executable, path, icon_label):
         super(ExecutableFields, self).__init__(parent)
 
         self.db_base_class = db_base_class
         self.db_session = db_session
         self.db_id = db_id
         self.parent = parent
+        self.ui = ui
 
         self.bgr_animation = BgrAnimation(path_line_edit)
 
         self.executable = executable
         self.path = path
+        self.icon_label = icon_label
 
         self.path_util = SetDirectoryPath(parent, mode='file',
                                           line_edit=path_line_edit, tool_button=path_btn,
                                           reject_invalid_path_edits=False)
         self.path_util.path_changed.connect(self.set_executable)
         self.path_util.set_path(Path(path) / executable)
+
+    def _get_exe_icon(self):
+        self.ui.icons_updated.connect(self.update_icon_label)
+        self.ui.start_get_executable_icon(Path(self.path) / self.executable)
+
+    @Slot(str)
+    def update_icon_label(self, exe_name):
+        if exe_name != self.executable:
+            return
+
+        pixmap = self.ui.exe_icons.get(exe_name)
+        if pixmap:
+            if isinstance(self.icon_label, QPushButton):
+                self.icon_label.setIcon(QIcon(pixmap))
+                logging.info('Setting Button exe icon: %s', exe_name)
+                return
+
+            if not self.icon_label:
+                return
+            logging.info('Setting exe icon: %s', exe_name)
+            self.icon_label.setPixmap(pixmap)
+            self.icon_label.setFixedWidth(48)
+            self.icon_label.setFixedHeight(48)
 
     def trigger_update(self):
         """ Used in delayed setup to render elements with valid/invalid executable paths """
@@ -103,6 +128,7 @@ class ExecutableFields(QObject):
                         'path', self.path)
 
         self.executable_changed.emit()
+        self._get_exe_icon()
 
 
 class GenericMsgBox(QMessageBox):

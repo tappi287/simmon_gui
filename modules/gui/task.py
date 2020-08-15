@@ -109,9 +109,9 @@ class TaskWidget(QWidget):
         self.condition_buttons: List[ConditionButton] = list()
         self.gate_buttons: List[GateButton] = list()
 
-        self.process_path = ExecutableFields(self, Process, self.ui.session, task.process_id,
+        self.process_path = ExecutableFields(self.ui, self, Process, self.ui.session, task.process_id,
                                              self.processPath, self.processPathBtn,
-                                             process.executable, process.path)
+                                             process.executable, process.path, self.taskIconLabel)
         self.setWindowTitle(task.name)
 
         self.refresh_conditions(task)
@@ -183,6 +183,7 @@ class TaskWidget(QWidget):
 
         condition_widget = ConditionWidget(self, condition)
         condition_btn = ConditionButton(self, condition_widget)
+        condition_widget.condition_button = condition_btn
         self.conditionBox.layout().addWidget(condition_btn)
         self.condition_buttons.append(condition_btn)
 

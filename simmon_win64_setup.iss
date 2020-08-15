@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Simmon"
-#define MyAppVersion "0.76b"
+#define MyAppVersion "0.8"
 #define MyAppPublisher "Stefan Tapper"
 #define MyAppURL "https://ilikeviecher.com"
 #define MyAppExeName "Simmon.exe"

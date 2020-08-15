@@ -1,5 +1,6 @@
 import logging
 import sys
+from multiprocessing import freeze_support
 
 import shiboken2
 
@@ -9,8 +10,7 @@ from shared_modules.globals import APP_FRIENDLY_NAME
 from shared_modules.migrate import db_engine, db_session
 from ui import gui_resource
 
-
-VERSION = '0.76b'
+VERSION = '0.8'
 
 # TODO: try to stop processes with close/exit signal rather than terminating it
 
@@ -21,8 +21,8 @@ def main():
     logging.info('%s v%s started', APP_FRIENDLY_NAME, VERSION)
     logging.info('Shiboken2: %s', shiboken2.__version__)
     gui_resource.qInitResources()
-
-    app = SimmonApp(VERSION, db_engine, db_session)
+    logging.debug('Log queue: %s', log_listener.queue)
+    app = SimmonApp(VERSION, db_engine, db_session, log_listener.queue)
     result = app.exec_()
 
     log_listener.stop()
@@ -33,4 +33,5 @@ def main():
 
 
 if __name__ == '__main__':
+    freeze_support()
     main()

@@ -28,7 +28,9 @@
     "installdir": "",
     "executable": "CrewChiefV4.exe",
     "exe_sub_path": "",
-    "simmon_method": "find_crew_chief_location"
+    "simmon_method": "find_by_registry_keys",
+    "simmon_method_args": [["SOFTWARE\\WOW6432Node\\Britton IT Ltd\\InstalledProducts\\CrewChiefV4",
+      "SOFTWARE\\Britton IT Ltd\\InstalledProducts\\CrewChiefV4"]]
   }
 }
 

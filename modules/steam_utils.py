@@ -5,7 +5,7 @@ import json
 import logging
 import winreg as registry
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Iterable, List, Optional, Tuple
 
 from . import acf
 from shared_modules.globals import get_default_profiles_dir
@@ -128,8 +128,10 @@ class SteamApps:
             # -- Get install dir with special method for eg. CrewChief non steam app
             if 'simmon_method' in entry_dict.keys():
                 method = getattr(KnownAppsMethods, entry_dict.get('simmon_method'))
+                args = entry_dict.get('simmon_method_args')
+
                 if callable(method):
-                    entry_dict['installdir'] = method()
+                    entry_dict['installdir'] = method(*args)
                     entry_dict['path'] = Path(Path(entry_dict['installdir']) / entry_dict['exe_sub_path']).as_posix()
 
             # -- Update install dir to an absolute path if not already absolute
@@ -141,10 +143,8 @@ class SteamApps:
 
 class KnownAppsMethods:
     @staticmethod
-    def find_crew_chief_location() -> Optional[str]:
+    def find_by_registry_keys(keys: Iterable) -> Optional[str]:
         key = None
-        keys = ('SOFTWARE\WOW6432Node\Britton IT Ltd\InstalledProducts\CrewChiefV4',  # this exists on a 64bit machine
-                'SOFTWARE\Britton IT Ltd\InstalledProducts\CrewChiefV4',)  # 32bit?
 
         for key_url in keys:
             try:

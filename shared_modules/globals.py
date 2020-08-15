@@ -22,6 +22,7 @@ WATCHER_TASK_NAME = 'SimmonWatcher_StartUp'
 UPDATE_VERSION_FILE = 'version.txt'
 UPDATE_INSTALL_FILE = 'Simmon_Setup_{version}_win64.exe'
 WIN_AUTOSTART_DIR = user_state_dir(roaming=True) + r'\Microsoft\Windows\Start Menu\Programs\Startup'
+ICON_DIR = 'icons'
 
 DEFAULT_LOG_LEVEL = 'DEBUG'
 UI_PATH = 'ui'

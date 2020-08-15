@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>466</width>
-    <height>77</height>
+    <height>79</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,16 +72,10 @@ QGroupBox::title {
       <item row="0" column="0" colspan="3">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="spacing">
-         <number>4</number>
+         <number>8</number>
         </property>
         <item>
          <widget class="QLabel" name="processIconLabel">
-          <property name="maximumSize">
-           <size>
-            <width>14</width>
-            <height>14</height>
-           </size>
-          </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>

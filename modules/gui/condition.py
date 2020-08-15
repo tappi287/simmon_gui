@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from qtpy.QtCore import QEvent, Qt
 from qtpy.QtGui import QShowEvent
 from qtpy.QtWidgets import QAction, QComboBox, QDialog, QLabel, QLayout, QLineEdit, QMenu, QPushButton, QStatusBar, \
@@ -28,6 +30,8 @@ class ConditionWidget(QDialog):
         self.statusBarLayout: QLayout
         self.statusBarLayout.addWidget(self.status_bar)
 
+        self._condition_button = None
+
         self.conditionRunning: QComboBox
         self.conditionRunning.setStatusTip('Condition is fulfilled if process is running or not running')
         self.conditionRunning.setCurrentIndex(0 if condition.running else 1)
@@ -53,12 +57,24 @@ class ConditionWidget(QDialog):
         self.model = Condition
 
         self.db_id = condition.id
-        self.process_path = ExecutableFields(self, Process, self.task_widget.ui.session, condition.process_id,
+        self.process_path = ExecutableFields(self.task_widget.ui, self, Process,
+                                             self.task_widget.ui.session, condition.process_id,
                                              self.processPath, self.processPathBtn,
-                                             condition.process.executable, condition.process.path)
+                                             condition.process.executable, condition.process.path, None)
 
         self.setWindowTitle(condition.name)
         self.installEventFilter(self)
+
+    @property
+    def condition_button(self):
+        return self._condition_button
+
+    @condition_button.setter
+    def condition_button(self, btn):
+        self._condition_button = btn
+        self.process_path.icon_label = btn
+        self.task_widget.ui.start_get_executable_icon(
+            Path(self.process_path.path) / self.process_path.executable)
 
     def eventFilter(self, obj, e: QEvent):
         if e.type() == QEvent.StatusTip:

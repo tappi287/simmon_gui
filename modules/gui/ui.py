@@ -1,16 +1,19 @@
 import logging
 import os
 from pathlib import Path
+from threading import Event
 
-from qtpy.QtCore import QTimer, QUrl, Qt
-from qtpy.QtGui import QIcon
-from qtpy.QtWidgets import QLabel, QMainWindow, QPushButton, QTabWidget, QTextBrowser, QWidget, QAction
+from qtpy.QtCore import QTimer, Qt, Signal
+from qtpy.QtGui import QIcon, QPixmap
+from qtpy.QtWidgets import QAction, QLabel, QMainWindow, QPushButton, QTabWidget, QWidget
 from sqlalchemy.event import listens_for
 from sqlalchemy.orm import Session
 
+from shared_modules.models import Profile
 from .addprofilemenu import AddProfileMenu
 from .expandable_widget import ExpandableWidget
 from .file_dialog import FileDialog
+from .get_icon import IconReceiverThread
 from .guiutil import GenericMsgBox, remove_from_db
 from .log_view import LogViewerWindow
 from .optionsmenu import OptionsMenu
@@ -20,8 +23,7 @@ from .watch_controller import WatcherController
 from ..import_export import ProfileImportExport
 from ..path_util import path_exists
 from ..ui_loader import SetupWidget
-from shared_modules.models import Profile
-from shared_modules.globals import get_current_modules_dir
+
 
 class SimmonUi(QMainWindow):
     debounce_timer = QTimer()
@@ -31,6 +33,11 @@ class SimmonUi(QMainWindow):
     watcher_update_trigger = QTimer()
     watcher_update_trigger.setInterval(8000)
     watcher_update_trigger.setSingleShot(True)
+
+    icons_updated = Signal(str)
+    request_exe_icon = Signal(Path)
+
+    exe_icons = dict()
 
     def __init__(self, app):
         """
@@ -83,6 +90,15 @@ class SimmonUi(QMainWindow):
 
         self.watch_controller = WatcherController(self, self.watcherStatusText, self.watcherUpdateBtn,
                                                   self.watcherStartBtn, self.watcherStopBtn)
+
+        # -- Get icon thread --
+        self.icon_exit = Event()
+        self.get_icons_thread = IconReceiverThread(self, self.icon_exit, self.app.log_queue)
+        self.get_icons_thread.pixmap_signal.connect(self.update_exe_icon)
+        self.request_exe_icon.connect(self.get_icons_thread.request_exe)
+        QTimer.singleShot(1500, self.get_icons_thread.start)
+        self.app.aboutToQuit.connect(self.icon_exit.set)
+
         self.options_menu = OptionsMenu(self)
         self.menuBar().addMenu(self.options_menu)
 
@@ -92,6 +108,20 @@ class SimmonUi(QMainWindow):
         self.create_widgets()
 
         self.install_event()
+
+    def start_get_executable_icon(self, exe_path: Path):
+        if not exe_path.is_file():
+            return
+
+        self.setStatusTip(f'Loading executable icon for {exe_path.name} ...')
+        logging.info('UI Requesting Icon from executable %s', exe_path.name)
+        self.request_exe_icon.emit(exe_path)
+
+    def update_exe_icon(self, exe_name: str, pixmap: QPixmap):
+        logging.debug('Updating UI Exe Icons: %s', exe_name)
+        self.setStatusTip(f'Loaded executable icon for {exe_name}')
+        self.exe_icons[exe_name] = pixmap
+        self.icons_updated.emit(exe_name)
 
     def install_event(self):
         """ Trigger Watcher updates from database commits inside the GUI """

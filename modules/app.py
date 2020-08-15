@@ -9,13 +9,14 @@ from .gui.ui import SimmonUi
 
 
 class SimmonApp(QApplication):
-    def __init__(self, version: str, db_engine, db_session):
+    def __init__(self, version: str, db_engine, db_session, log_queue):
         super(SimmonApp, self).__init__(sys.argv)
         self.setApplicationName(APP_FRIENDLY_NAME)
         self.setApplicationVersion(version)
         self.setApplicationDisplayName(f'{APP_FRIENDLY_NAME} v{version}')
 
         self.db_engine, self.db_session = db_engine, db_session
+        self.log_queue = log_queue
 
         self.ui = SimmonUi(self)
         self.ui.show()

@@ -1,12 +1,13 @@
 import logging
 from pathlib import Path, WindowsPath
 
+from qtpy.QtCore import QSize
 from qtpy.QtWidgets import QComboBox, QLabel, QLineEdit, QPushButton, QToolButton, QWidget
 
-from .guiutil import AskToContinue, BgrAnimation, ExecutableFields, update_db_entry
 from shared_modules.models import NOTIFICATION_TYPES, Process
-from ..ui_loader import SetupWidget
 from shared_modules.utils import get_file_properties
+from .guiutil import AskToContinue, ExecutableFields, update_db_entry
+from ..ui_loader import SetupWidget
 
 
 class ProcessWidget(QWidget):
@@ -24,6 +25,7 @@ class ProcessWidget(QWidget):
         self.processName: QLabel
         self.processName.setText(process.name)
         self.processIconLabel: QLabel
+        self.processIconLabel.setFixedSize(QSize(48, 48))
 
         self.processNotificationType: QComboBox
         self.processNotificationType.setStatusTip('Creation - the process was started, '
@@ -52,9 +54,10 @@ class ProcessWidget(QWidget):
         # -- Update executable ProductName
         self._update_executable_product_name(process)
 
-        self.process_path = ExecutableFields(self, Process, self.profile_widget.ui.session, self.db_id,
+        self.process_path = ExecutableFields(self.profile_widget.ui, self, Process,
+                                             self.profile_widget.ui.session, self.db_id,
                                              self.processPath, self.processPathBtn,
-                                             process.executable, process.path)
+                                             process.executable, process.path, self.processIconLabel)
         self.process_path.executable_changed.connect(self.executable_updated)
 
         self.setWindowTitle(process.name)
