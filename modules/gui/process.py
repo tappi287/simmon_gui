@@ -107,7 +107,7 @@ class ProcessWidget(QWidget):
         try:
             file_props = get_file_properties(str(WindowsPath(exe_path)))
             file_info = file_props.get('StringFileInfo', dict())
-            product_name = file_info.get('ProductName', '')
+            product_name = file_info.get('ProductName') or 'No Product Info'
             if file_props.get('FileVersion'):
                 product_name = f'{product_name} - v{file_props.get("FileVersion")}'
         except Exception as e:

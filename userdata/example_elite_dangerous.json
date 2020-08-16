@@ -1,0 +1,101 @@
+{
+    "active": true,
+    "id": 2,
+    "name": "Elite Dangerous",
+    "processes": [
+        {
+            "executable": "EliteDangerous64.exe",
+            "id": 26,
+            "name": "Elite:Dangerous - v238.603.0.0",
+            "notification_type": "Creation",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Elite Dangerous\\Products\\elite-dangerous-64",
+            "profile_id": 2
+        },
+        {
+            "executable": "EliteDangerous64.exe",
+            "id": 27,
+            "name": "Elite:Dangerous - v238.603.0.0",
+            "notification_type": "Deletion",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Elite Dangerous\\Products\\elite-dangerous-64",
+            "profile_id": 2
+        }
+    ],
+    "tasks": [
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "-minimize -nofocus",
+            "conditions": [
+                {
+                    "id": 10,
+                    "name": "Elite running",
+                    "order": 0,
+                    "process": {
+                        "executable": "EliteDangerous64.exe",
+                        "id": 29,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Elite Dangerous\\Products\\elite-dangerous-64"
+                    },
+                    "process_id": 29,
+                    "running": true,
+                    "task_id": 8
+                }
+            ],
+            "cwd": "",
+            "gates": [],
+            "id": 8,
+            "name": "Start Voice Attack",
+            "process": {
+                "executable": "VoiceAttack.exe",
+                "id": 28,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\VoiceAttack"
+            },
+            "process_id": 28,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": true,
+            "command": "-exit",
+            "conditions": [
+                {
+                    "id": 11,
+                    "name": "Elite not running",
+                    "order": 0,
+                    "process": {
+                        "executable": "EliteDangerous64.exe",
+                        "id": 31,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Elite Dangerous\\Products\\elite-dangerous-64"
+                    },
+                    "process_id": 31,
+                    "running": false,
+                    "task_id": 9
+                }
+            ],
+            "cwd": ".",
+            "gates": [],
+            "id": 9,
+            "name": "Exit Voice Attack",
+            "process": {
+                "executable": "VoiceAttack.exe",
+                "id": 30,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\VoiceAttack"
+            },
+            "process_id": 30,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        }
+    ]
+}

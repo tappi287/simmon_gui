@@ -10,7 +10,7 @@ from shared_modules.globals import APP_FRIENDLY_NAME
 from shared_modules.migrate import db_engine, db_session
 from ui import gui_resource
 
-VERSION = '0.8'
+VERSION = '0.9'
 
 # TODO: try to stop processes with close/exit signal rather than terminating it
 

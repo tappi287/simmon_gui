@@ -1,0 +1,160 @@
+{
+    "active": true,
+    "id": 2,
+    "name": "Flight Simulators",
+    "processes": [
+        {
+            "executable": "aerofly_fs_2.exe",
+            "id": 30,
+            "name": "Aerofly FS 2 Flight Simulator - v2.4.9.31",
+            "notification_type": "Creation",
+            "path": "G:\\SteamLibrary\\steamapps\\common\\Aerofly FS 2 Flight Simulator\\bin64",
+            "profile_id": 2
+        },
+        {
+            "executable": "aerofly_fs_2.exe",
+            "id": 31,
+            "name": "Aerofly FS 2 Flight Simulator - v2.4.9.31",
+            "notification_type": "Deletion",
+            "path": "G:\\SteamLibrary\\steamapps\\common\\Aerofly FS 2 Flight Simulator\\bin64",
+            "profile_id": 2
+        },
+        {
+            "executable": "X-Plane.exe",
+            "id": 32,
+            "name": "X-Plane - v11.0.50.29",
+            "notification_type": "Creation",
+            "path": "G:\\SteamLibrary\\steamapps\\common\\X-Plane 11",
+            "profile_id": 2
+        },
+        {
+            "executable": "X-Plane.exe",
+            "id": 33,
+            "name": "X-Plane - v11.0.50.29",
+            "notification_type": "Deletion",
+            "path": "G:\\SteamLibrary\\steamapps\\common\\X-Plane 11",
+            "profile_id": 2
+        },
+        {
+            "executable": "Santa Simulator.exe",
+            "id": 34,
+            "name": "No Product Info - v2018.2.5.29137",
+            "notification_type": "Creation",
+            "path": "I:\\Steam\\steamapps\\common\\Santa Simulator",
+            "profile_id": 2
+        },
+        {
+            "executable": "Santa Simulator.exe",
+            "id": 35,
+            "name": "No Product Info - v2018.2.5.29137",
+            "notification_type": "Deletion",
+            "path": "I:\\Steam\\steamapps\\common\\Santa Simulator",
+            "profile_id": 2
+        }
+    ],
+    "tasks": [
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "-minimize -nofocus",
+            "conditions": [],
+            "cwd": "",
+            "gates": [],
+            "id": 8,
+            "name": "Start Voice Attack",
+            "process": {
+                "executable": "VoiceAttack.exe",
+                "id": 26,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\VoiceAttack"
+            },
+            "process_id": 26,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": true,
+            "command": "-exit",
+            "conditions": [
+                {
+                    "id": 10,
+                    "name": "X-Plane 11 not running",
+                    "order": 0,
+                    "process": {
+                        "executable": "X-Plane.exe",
+                        "id": 28,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "G:\\SteamLibrary\\steamapps\\common\\X-Plane 11"
+                    },
+                    "process_id": 28,
+                    "running": false,
+                    "task_id": 9
+                },
+                {
+                    "id": 11,
+                    "name": "Aerofly FS 2 not running",
+                    "order": 1,
+                    "process": {
+                        "executable": "aerofly_fs_2.exe",
+                        "id": 29,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "G:\\SteamLibrary\\steamapps\\common\\Aerofly FS 2 Flight Simulator\\bin64"
+                    },
+                    "process_id": 29,
+                    "running": false,
+                    "task_id": 9
+                },
+                {
+                    "id": 12,
+                    "name": "Santa Simulator not running",
+                    "order": 2,
+                    "process": {
+                        "executable": "Santa Simulator.exe",
+                        "id": 36,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "I:\\Steam\\steamapps\\common\\Santa Simulator"
+                    },
+                    "process_id": 36,
+                    "running": false,
+                    "task_id": 9
+                }
+            ],
+            "cwd": ".",
+            "gates": [
+                {
+                    "id": 5,
+                    "order": 0,
+                    "task_id": 9,
+                    "value": true
+                },
+                {
+                    "id": 6,
+                    "order": 1,
+                    "task_id": 9,
+                    "value": true
+                }
+            ],
+            "id": 9,
+            "name": "Exit Voice Attack",
+            "process": {
+                "executable": "VoiceAttack.exe",
+                "id": 27,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\VoiceAttack"
+            },
+            "process_id": 27,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        }
+    ]
+}

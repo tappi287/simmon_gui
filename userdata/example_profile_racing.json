@@ -1,7 +1,7 @@
 {
     "active": true,
-    "id": 2,
-    "name": "Racing_Example",
+    "id": 1,
+    "name": "Sim Racing simple",
     "processes": [
         {
             "executable": "AC2-Win64-Shipping.exe",

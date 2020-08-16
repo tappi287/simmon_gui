@@ -1,0 +1,85 @@
+{
+    "active": true,
+    "id": 2,
+    "name": "Combat Flight Simulators",
+    "processes": [
+        {
+            "executable": "DCS.exe",
+            "id": 26,
+            "name": "Process_00",
+            "notification_type": "Creation",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\DCSWorld\\bin",
+            "profile_id": 2
+        },
+        {
+            "executable": "DCS.exe",
+            "id": 27,
+            "name": "Process_01",
+            "notification_type": "Deletion",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\DCSWorld\\bin",
+            "profile_id": 2
+        }
+    ],
+    "tasks": [
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "",
+            "conditions": [],
+            "cwd": "",
+            "gates": [],
+            "id": 8,
+            "name": "Start Helios",
+            "process": {
+                "executable": "Control Center.exe",
+                "id": 28,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files\\Helios"
+            },
+            "process_id": 28,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": true,
+            "command": "-exit",
+            "conditions": [
+                {
+                    "id": 10,
+                    "name": "DCS not running",
+                    "order": 0,
+                    "process": {
+                        "executable": "DCS.exe",
+                        "id": 30,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\DCSWorld\\bin"
+                    },
+                    "process_id": 30,
+                    "running": false,
+                    "task_id": 9
+                }
+            ],
+            "cwd": "",
+            "gates": [],
+            "id": 9,
+            "name": "Exit Helios",
+            "process": {
+                "executable": "Control Center.exe",
+                "id": 29,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files\\Helios"
+            },
+            "process_id": 29,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        }
+    ]
+}

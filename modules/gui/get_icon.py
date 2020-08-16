@@ -54,25 +54,28 @@ class IconReceiverThread(Thread):
             try:
                 with Pool(processes=2) as pool:
                     img_data = pool.apply(get_executable_icon, (current_order, ))
-            except Empty:
+            except Exception as e:
+                logging.error('Error extracting executable icon: %s', e)
                 continue
 
             # -- Write and emit result --
-            if img_data is not None:
-                # -- Create and store QImage
-                img = QImage.fromData(img_data)
-                if img.width() == 0:
-                    logging.debug('Skipping empty extracted Exe Icon: %s', current_order.name)
-                    continue
+            if img_data is None:
+                continue
 
-                self._write_image(current_order.name, img)
-                self.icon_files[current_order.name] = img
+            # -- Create and store QImage
+            img = QImage.fromData(img_data)
+            if img.width() == 0:
+                logging.debug('Skipping empty extracted Exe Icon: %s', current_order.name)
+                continue
 
-                # -- Create and emit QPixmap --
-                q_pixmap = QPixmap.fromImage(img)
-                logging.debug('Get icon thread received: %s icon with size %s',
-                              current_order.name, q_pixmap.size())
-                self.pixmap_signal.emit(current_order.name, q_pixmap)
+            self._write_image(current_order.name, img)
+            self.icon_files[current_order.name] = img
+
+            # -- Create and emit QPixmap --
+            q_pixmap = QPixmap.fromImage(img)
+            logging.debug('Get icon thread received: %s icon with size %s',
+                          current_order.name, q_pixmap.size())
+            self.pixmap_signal.emit(current_order.name, q_pixmap)
 
         logging.info('Icon Receiver Thread exiting')
 

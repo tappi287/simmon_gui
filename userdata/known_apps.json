@@ -23,6 +23,36 @@
     "executable": "AMS2AVX.exe",
     "exe_sub_path": ""
   },
+  "359320": {
+    "name": "Elite Dangerous",
+    "installdir": "Elite Dangerous",
+    "executable": "EliteDangerous64.exe",
+    "exe_sub_path": "Products/elite-dangerous-64/"
+  },
+  "434030": {
+    "name": "Aerofly FS 2 Flight Simulator",
+    "installdir": "Aerofly FS 2 Flight Simulator",
+    "executable": "aerofly_fs_2.exe",
+    "exe_sub_path": "bin64/"
+  },
+  "269950": {
+    "name": "X-Plane 11",
+    "installdir": "X-Plane 11",
+    "executable": "X-Plane.exe",
+    "exe_sub_path": ""
+  },
+  "991480": {
+    "name": "Santa Simulator",
+    "installdir": "Santa Simulator",
+    "executable": "Santa Simulator.exe",
+    "exe_sub_path": ""
+  },
+  "223750": {
+    "name": "DCS World Steam Edition",
+    "installdir": "DCSWorld",
+    "executable": "DCS.exe",
+    "exe_sub_path": "bin/"
+  },
   "CrewChiefV4": {
     "name": "CrewChief v4",
     "installdir": "",
@@ -30,7 +60,31 @@
     "exe_sub_path": "",
     "simmon_method": "find_by_registry_keys",
     "simmon_method_args": [["SOFTWARE\\WOW6432Node\\Britton IT Ltd\\InstalledProducts\\CrewChiefV4",
-      "SOFTWARE\\Britton IT Ltd\\InstalledProducts\\CrewChiefV4"]]
+      "SOFTWARE\\Britton IT Ltd\\InstalledProducts\\CrewChiefV4"], "InstallLocation"]
+  },
+  "Voice_Attack": {
+    "name": "Voice Attack",
+    "installdir": "",
+    "executable": "VoiceAttack.exe",
+    "exe_sub_path": "",
+    "simmon_method": "find_by_registry_keys_current_user",
+    "simmon_method_args": [["Software\\VoiceAttack.com\\VoiceAttack"], "InstallPath"]
+  },
+  "TrackIR_5": {
+    "name": "TrackIR 5",
+    "installdir": "",
+    "executable": "TrackIR5.exe",
+    "exe_sub_path": "",
+    "simmon_method": "find_by_registry_keys_current_user",
+    "simmon_method_args": [["Software\\NaturalPoint\\NaturalPoint\\NPClient Location"], "Path"]
+  },
+  "IL-2_Sturmovik": {
+    "name": "IL-2 Sturmovik",
+    "installdir": "",
+    "executable": "IL-2.exe",
+    "exe_sub_path": "bin/game/",
+    "simmon_method": "find_by_registry_keys",
+    "simmon_method_args": [["SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{66F649A9-0FA2-487E-BC0D-894BD7E89D5E}_is1"],
+      "InstallLocation"]
   }
 }
-

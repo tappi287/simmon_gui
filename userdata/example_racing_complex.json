@@ -1,0 +1,355 @@
+{
+    "active": true,
+    "id": 2,
+    "name": "Sim Racing complex",
+    "processes": [
+        {
+            "executable": "AC2-Win64-Shipping.exe",
+            "id": 1,
+            "name": "Assetto Corsa Competizione - v4.22.3.0",
+            "notification_type": "Creation",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64",
+            "profile_id": 1
+        },
+        {
+            "executable": "AC2-Win64-Shipping.exe",
+            "id": 2,
+            "name": "Assetto Corsa Competizione - v4.22.3.0",
+            "notification_type": "Deletion",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64",
+            "profile_id": 1
+        },
+        {
+            "executable": "rFactor2.exe",
+            "id": 3,
+            "name": "rFactor 2 - v1.1.2.0",
+            "notification_type": "Creation",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\rFactor 2\\Bin64",
+            "profile_id": 1
+        },
+        {
+            "executable": "rFactor2.exe",
+            "id": 4,
+            "name": "rFactor 2 - v1.1.2.0",
+            "notification_type": "Deletion",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\rFactor 2\\Bin64",
+            "profile_id": 1
+        },
+        {
+            "executable": "AMS2AVX.exe",
+            "id": 5,
+            "name": "Automobilista 2 - v1.0.2.1",
+            "notification_type": "Creation",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Automobilista 2",
+            "profile_id": 1
+        },
+        {
+            "executable": "AMS2AVX.exe",
+            "id": 6,
+            "name": "Automobilista 2 - v1.0.2.1",
+            "notification_type": "Deletion",
+            "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Automobilista 2",
+            "profile_id": 1
+        }
+    ],
+    "tasks": [
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "",
+            "conditions": [],
+            "cwd": "",
+            "gates": [],
+            "id": 1,
+            "name": "Start SimHub",
+            "process": {
+                "executable": "SimHubWPF.exe",
+                "id": 7,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\SimHub"
+            },
+            "process_id": 7,
+            "profile_id": 1,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": true,
+            "command": "-exit",
+            "conditions": [
+                {
+                    "id": 1,
+                    "name": "rf2 not running",
+                    "order": 0,
+                    "process": {
+                        "executable": "rFactor2.exe",
+                        "id": 9,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\rFactor 2\\Bin64"
+                    },
+                    "process_id": 9,
+                    "running": false,
+                    "task_id": 2
+                },
+                {
+                    "id": 2,
+                    "name": "AMS2 not running",
+                    "order": 1,
+                    "process": {
+                        "executable": "AMS2AVX.exe",
+                        "id": 10,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Automobilista 2"
+                    },
+                    "process_id": 10,
+                    "running": false,
+                    "task_id": 2
+                },
+                {
+                    "id": 3,
+                    "name": "ACC not running",
+                    "order": 2,
+                    "process": {
+                        "executable": "AC2-Win64-Shipping.exe",
+                        "id": 11,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64"
+                    },
+                    "process_id": 11,
+                    "running": false,
+                    "task_id": 2
+                }
+            ],
+            "cwd": "",
+            "gates": [
+                {
+                    "id": 1,
+                    "order": 0,
+                    "task_id": 2,
+                    "value": true
+                },
+                {
+                    "id": 2,
+                    "order": 1,
+                    "task_id": 2,
+                    "value": true
+                }
+            ],
+            "id": 2,
+            "name": "Close SimHub",
+            "process": {
+                "executable": "SimHubWPF.exe",
+                "id": 8,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\SimHub"
+            },
+            "process_id": 8,
+            "profile_id": 1,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": true,
+            "command": "-c_exit",
+            "conditions": [
+                {
+                    "id": 4,
+                    "name": "rf2 not running",
+                    "order": 0,
+                    "process": {
+                        "executable": "rFactor2.exe",
+                        "id": 17,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\rFactor 2\\Bin64"
+                    },
+                    "process_id": 17,
+                    "running": false,
+                    "task_id": 4
+                },
+                {
+                    "id": 5,
+                    "name": "AMS2 not running",
+                    "order": 1,
+                    "process": {
+                        "executable": "AMS2AVX.exe",
+                        "id": 18,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Automobilista 2"
+                    },
+                    "process_id": 18,
+                    "running": false,
+                    "task_id": 4
+                },
+                {
+                    "id": 6,
+                    "name": "ACC not running",
+                    "order": 2,
+                    "process": {
+                        "executable": "AC2-Win64-Shipping.exe",
+                        "id": 19,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64"
+                    },
+                    "process_id": 19,
+                    "running": false,
+                    "task_id": 4
+                }
+            ],
+            "cwd": "",
+            "gates": [
+                {
+                    "id": 3,
+                    "order": 0,
+                    "task_id": 4,
+                    "value": true
+                },
+                {
+                    "id": 4,
+                    "order": 1,
+                    "task_id": 4,
+                    "value": true
+                }
+            ],
+            "id": 4,
+            "name": "Close CrewChief",
+            "process": {
+                "executable": "CrewChiefV4.exe",
+                "id": 16,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\Britton IT Ltd\\CrewChiefV4"
+            },
+            "process_id": 16,
+            "profile_id": 1,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "-game AMS2 -skip_updates",
+            "conditions": [
+                {
+                    "id": 7,
+                    "name": "AMS2 running",
+                    "order": 0,
+                    "process": {
+                        "executable": "AMS2AVX.exe",
+                        "id": 21,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Automobilista 2"
+                    },
+                    "process_id": 21,
+                    "running": true,
+                    "task_id": 5
+                }
+            ],
+            "cwd": "",
+            "gates": [],
+            "id": 5,
+            "name": "Start CrewChief AMS2",
+            "process": {
+                "executable": "CrewChiefV4.exe",
+                "id": 20,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\Britton IT Ltd\\CrewChiefV4"
+            },
+            "process_id": 20,
+            "profile_id": 1,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "-game RF2 -skip_updates",
+            "conditions": [
+                {
+                    "id": 8,
+                    "name": "rf2 running",
+                    "order": 0,
+                    "process": {
+                        "executable": "rFactor2.exe",
+                        "id": 23,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\rFactor 2\\Bin64"
+                    },
+                    "process_id": 23,
+                    "running": true,
+                    "task_id": 6
+                }
+            ],
+            "cwd": "",
+            "gates": [],
+            "id": 6,
+            "name": "Start CrewChief rf2",
+            "process": {
+                "executable": "CrewChiefV4.exe",
+                "id": 22,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\Britton IT Ltd\\CrewChiefV4"
+            },
+            "process_id": 22,
+            "profile_id": 1,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "-game ACC -skip_updates",
+            "conditions": [
+                {
+                    "id": 9,
+                    "name": "ACC running",
+                    "order": 0,
+                    "process": {
+                        "executable": "AC2-Win64-Shipping.exe",
+                        "id": 25,
+                        "name": "Process",
+                        "notification_type": "Creation",
+                        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione\\AC2\\Binaries\\Win64"
+                    },
+                    "process_id": 25,
+                    "running": true,
+                    "task_id": 7
+                }
+            ],
+            "cwd": "",
+            "gates": [],
+            "id": 7,
+            "name": "Start CrewChief ACC",
+            "process": {
+                "executable": "CrewChiefV4.exe",
+                "id": 24,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\Britton IT Ltd\\CrewChiefV4"
+            },
+            "process_id": 24,
+            "profile_id": 1,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        }
+    ]
+}

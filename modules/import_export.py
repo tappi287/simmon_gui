@@ -45,12 +45,13 @@ class ProfileImportExport:
 
         if entry.executable in cls.known_app_executables:
             manifest = cls.known_app_executables.get(entry.executable)
-            cls.auto_detected_msg_ls.append(manifest.get('name'))
-            path = Path(manifest.get('path'))
-            win_path = str(WindowsPath(path))
+            path = Path(manifest.get('path') or '')
+
             if path.exists():
+                win_path = str(WindowsPath(path))
                 entry.path = win_path
-                logging.info('Updated Process Entry #%s with auto-detected location: %s', entry.id, win_path)
+                cls.auto_detected_msg_ls.append(manifest.get('name'))
+                logging.info('Updated Process Entry #%s with auto-detected location: %s', entry.id or -1, win_path)
 
     @classmethod
     def _get_single_foreign_attributes(cls, entry, data, use_known_apps):

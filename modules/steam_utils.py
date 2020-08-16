@@ -132,7 +132,11 @@ class SteamApps:
 
                 if callable(method):
                     entry_dict['installdir'] = method(*args)
-                    entry_dict['path'] = Path(Path(entry_dict['installdir']) / entry_dict['exe_sub_path']).as_posix()
+                    if entry_dict['installdir'] is not None:
+                        entry_dict['path'] = Path(Path(entry_dict['installdir']) /
+                                                  entry_dict['exe_sub_path']).as_posix()
+                    else:
+                        entry_dict['path'] = ''
 
             # -- Update install dir to an absolute path if not already absolute
             self._add_path(entry_dict, lib_folders)
@@ -142,13 +146,18 @@ class SteamApps:
 
 
 class KnownAppsMethods:
+    @classmethod
+    def find_by_registry_keys_current_user(cls, *args):
+        return cls.find_by_registry_keys(*args, user_reg=True)
+
     @staticmethod
-    def find_by_registry_keys(keys: Iterable) -> Optional[str]:
+    def find_by_registry_keys(keys: Iterable, key_name: str, user_reg: bool = False) -> Optional[str]:
         key = None
+        reg = registry.HKEY_CURRENT_USER if user_reg else registry.HKEY_LOCAL_MACHINE
 
         for key_url in keys:
             try:
-                key = registry.OpenKey(registry.HKEY_LOCAL_MACHINE, key_url)
+                key = registry.OpenKey(reg, key_url)
                 break
             except FileNotFoundError as e:
                 logging.error('Could not locate registry key %s: %s', key_url, e)
@@ -156,4 +165,8 @@ class KnownAppsMethods:
         if not key:
             return None
 
-        return registry.QueryValueEx(key, "InstallLocation")[0]
+        try:
+            value = registry.QueryValueEx(key, key_name)[0]
+            return value
+        except FileNotFoundError as e:
+            logging.error('Could not locate value in key %s: %s', key_name, e)

@@ -66,11 +66,22 @@ class ExecutableFields(QObject):
         self.path = path
         self.icon_label = icon_label
 
-        self.path_util = SetDirectoryPath(parent, mode='file',
+        self.path_util = SetDirectoryPath(self, mode='file',
                                           line_edit=path_line_edit, tool_button=path_btn,
                                           reject_invalid_path_edits=False)
         self.path_util.path_changed.connect(self.set_executable)
         self.path_util.set_path(Path(path) / executable)
+
+        self.parent.destroyed.connect(self._parent_destroyed)
+        self._is_destroyed = False
+
+    def _parent_destroyed(self):
+        """ Somehow this child will not get properly garbage collected by PySide2 therefore we need to make
+            sure ourselves not to access any C++ objects after parent deletion
+        """
+        logging.debug('Destroying ExecutableField Helper Object')
+        self._is_destroyed = True
+        self.deleteLater()
 
     def _get_exe_icon(self):
         self.ui.icons_updated.connect(self.update_icon_label)
@@ -78,7 +89,7 @@ class ExecutableFields(QObject):
 
     @Slot(str)
     def update_icon_label(self, exe_name):
-        if exe_name != self.executable:
+        if exe_name != self.executable or self._is_destroyed:
             return
 
         pixmap = self.ui.exe_icons.get(exe_name)

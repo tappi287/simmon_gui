@@ -1,5 +1,6 @@
 from pathlib import Path, WindowsPath
 
+from PySide2.QtGui import QColor
 from qtpy.QtCore import QUrl
 from qtpy.QtWidgets import QPushButton, QTableWidget, QTableWidgetItem, QTextBrowser, QWidget
 
@@ -55,12 +56,16 @@ class QuickStartTab(QWidget):
             t.setItem(row, 0, q(app_id))
             t.setItem(row, 1, q(manifest.get('name')))
 
-            path = Path(manifest.get('path')) / manifest.get('executable')
+            path = Path(manifest.get('path', '.')) / manifest.get('executable', '')
             t.setItem(row, 2, q(str(WindowsPath(path))))
 
             size_bytes = manifest.get('SizeOnDisk', 0)
             size = f"{convert_unit(size_bytes, SizeUnit.GB):.02f} GB"
             t.setItem(row, 3, q(f"{'N/A' if not size_bytes else size}"))
+
+            # -- Highlight Known Apps
+            for col in range(t.columnCount()):
+                t.item(row, col).setBackground(QColor(224, 255, 221))
 
         # -- Steam Apps
         s.steam_apps.pop(STEAM_LIBRARY_FOLDERS)
