@@ -24,11 +24,15 @@ def main():
     logging.debug('Log queue: %s', log_listener.queue)
     app = SimmonApp(VERSION, db_engine, db_session, log_listener.queue)
     result = app.exec_()
+    logging.info('Qt Application exited with result: %s', result)
 
+    logging.debug('Stopping Log listener')
     log_listener.stop()
+    logging.debug('Shutting down logging')
     logging.shutdown()
+    print('Cleaning up Qt resources')
     gui_resource.qCleanupResources()
-
+    print('About to SysExit', result)
     sys.exit(result)
 
 

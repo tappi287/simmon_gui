@@ -1,7 +1,6 @@
 import logging
-from multiprocessing import Pool, Queue
+from multiprocessing import Pool
 from pathlib import Path, WindowsPath
-from queue import Empty
 from threading import Thread
 from typing import Optional
 
@@ -22,19 +21,18 @@ class GetIconSignals(QObject):
 class IconReceiverThread(Thread):
     icon_files = dict()
 
-    def __init__(self, ui, exit_event, log_queue):
+    def __init__(self, ui, exit_event):
         super(IconReceiverThread, self).__init__()
         self.signal_obj = GetIconSignals(ui)
         self.pixmap_signal = self.signal_obj.pixmap
 
         self.exit_event = exit_event
-        self.receive_icon_queue = Queue()
-        self.log_queue = log_queue
         self.orders = set()
 
     def run(self) -> None:
         logging.debug('Icon Receiver Thread starting.')
         self._get_icon_files_from_disk()
+        process_pool = Pool(processes=2)
 
         while not self.exit_event.is_set():
             # -- Work down ordered Icons --
@@ -52,8 +50,7 @@ class IconReceiverThread(Thread):
 
             # -- Extract Icon's --
             try:
-                with Pool(processes=2) as pool:
-                    img_data = pool.apply(get_executable_icon, (current_order, ))
+                img_data = process_pool.apply(get_executable_icon, (current_order, ))
             except Exception as e:
                 logging.error('Error extracting executable icon: %s', e)
                 continue
@@ -77,7 +74,11 @@ class IconReceiverThread(Thread):
                           current_order.name, q_pixmap.size())
             self.pixmap_signal.emit(current_order.name, q_pixmap)
 
+        process_pool.terminate()
+        process_pool.join()
+        del process_pool
         logging.info('Icon Receiver Thread exiting')
+        del self
 
     @staticmethod
     def _write_image(exe_name: str, img: QImage):

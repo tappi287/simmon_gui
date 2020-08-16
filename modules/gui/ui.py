@@ -4,7 +4,7 @@ from pathlib import Path
 from threading import Event
 
 from qtpy.QtCore import QTimer, Qt, Signal
-from qtpy.QtGui import QIcon, QPixmap
+from qtpy.QtGui import QIcon, QPixmap, QCloseEvent
 from qtpy.QtWidgets import QAction, QLabel, QMainWindow, QPushButton, QTabWidget, QWidget
 from sqlalchemy.event import listens_for
 from sqlalchemy.orm import Session
@@ -36,6 +36,7 @@ class SimmonUi(QMainWindow):
 
     icons_updated = Signal(str)
     request_exe_icon = Signal(Path)
+    start_shutdown = Signal()
 
     exe_icons = dict()
 
@@ -93,11 +94,10 @@ class SimmonUi(QMainWindow):
 
         # -- Get icon thread --
         self.icon_exit = Event()
-        self.get_icons_thread = IconReceiverThread(self, self.icon_exit, self.app.log_queue)
+        self.get_icons_thread = IconReceiverThread(self, self.icon_exit)
         self.get_icons_thread.pixmap_signal.connect(self.update_exe_icon)
         self.request_exe_icon.connect(self.get_icons_thread.request_exe)
         QTimer.singleShot(1500, self.get_icons_thread.start)
-        self.app.aboutToQuit.connect(self.icon_exit.set)
 
         self.options_menu = OptionsMenu(self)
         self.menuBar().addMenu(self.options_menu)
@@ -108,6 +108,24 @@ class SimmonUi(QMainWindow):
         self.create_widgets()
 
         self.install_event()
+        self._ready_to_quit = False
+        self.start_shutdown.connect(self._shutdown)
+
+    def closeEvent(self, event: QCloseEvent):
+        self.icon_exit.set()
+
+        if not self._ready_to_quit:
+            self.start_shutdown.emit()
+            event.ignore()
+            return False
+
+        event.accept()
+        return True
+
+    def _shutdown(self):
+        self.get_icons_thread.join(timeout=10)
+        self._ready_to_quit = True
+        QTimer.singleShot(100, self.close)
 
     def start_get_executable_icon(self, exe_path: Path):
         if not exe_path.is_file():

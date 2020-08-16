@@ -3,7 +3,7 @@ import logging.config
 import sys
 from logging.handlers import QueueHandler, QueueListener
 from pathlib import Path
-from multiprocessing import Queue
+from queue import Queue
 
 from .globals import APP_NAME, DEFAULT_LOG_LEVEL, get_log_dir
 
@@ -86,7 +86,6 @@ def setup_log_queue_listener(logger, log_queue):
     logger.addHandler(queue_handler)
 
     listener = QueueListener(log_queue, *handler_ls)
-    listener.queue = log_queue
     return listener
 
 

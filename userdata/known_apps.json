@@ -86,5 +86,14 @@
     "simmon_method": "find_by_registry_keys",
     "simmon_method_args": [["SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{66F649A9-0FA2-487E-BC0D-894BD7E89D5E}_is1"],
       "InstallLocation"]
+  },
+  "SimHub": {
+    "name": "SimHub",
+    "installdir": "",
+    "executable": "SimHubWPF.exe",
+    "exe_sub_path": "",
+    "simmon_method": "find_by_registry_keys_current_user",
+    "simmon_method_args": [["Software\\SimHub"],
+      "InstallDirectory"]
   }
 }

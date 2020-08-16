@@ -96,12 +96,10 @@ class ExecutableFields(QObject):
         if pixmap:
             if isinstance(self.icon_label, QPushButton):
                 self.icon_label.setIcon(QIcon(pixmap))
-                logging.info('Setting Button exe icon: %s', exe_name)
                 return
 
             if not self.icon_label:
                 return
-            logging.info('Setting exe icon: %s', exe_name)
             self.icon_label.setPixmap(pixmap)
             self.icon_label.setFixedWidth(48)
             self.icon_label.setFixedHeight(48)

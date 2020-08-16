@@ -15,6 +15,7 @@ sqlalchemy = "*"
 alembic = "*"
 PySide2 = "*"
 qtpy = "*"
+pyinstaller = "==4.0"
 
 [requires]
 python_version = "3.8"
