@@ -74,7 +74,7 @@ class TaskWidget(QWidget):
 
         self.taskGrpBox: QGroupBox
         self.taskGrpBox.setTitle(task.name)
-        self.taskGrpBox.setChecked(task.active or True)
+        self.taskGrpBox.setChecked(True if task.active else False)
         self.taskGrpBox.toggled.connect(self.update_task_active)
         self.taskIconLabel: QLabel
         self.taskLabel: QLabel

@@ -94,7 +94,7 @@ class ProcessWidget(QWidget):
         self.setWindowTitle(process.name)
         self.processName.setText(process.name)
 
-    def _update_executable_product_name(self, process):
+    def _update_executable_product_name(self, process: Process):
         """ Get the ProductName info from executable and updates this Process Name """
         if not process.executable:
             return
@@ -107,7 +107,7 @@ class ProcessWidget(QWidget):
         try:
             file_props = get_file_properties(str(WindowsPath(exe_path)))
             file_info = file_props.get('StringFileInfo', dict())
-            product_name = file_info.get('ProductName') or 'No Product Info'
+            product_name = file_info.get('ProductName') or process.executable
             if file_props.get('FileVersion'):
                 product_name = f'{product_name} - v{file_props.get("FileVersion")}'
         except Exception as e:
