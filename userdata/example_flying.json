@@ -5,7 +5,7 @@
     "processes": [
         {
             "executable": "aerofly_fs_2.exe",
-            "id": 30,
+            "id": 31,
             "name": "Aerofly FS 2 Flight Simulator - v2.4.9.31",
             "notification_type": "Creation",
             "path": "G:\\SteamLibrary\\steamapps\\common\\Aerofly FS 2 Flight Simulator\\bin64",
@@ -13,7 +13,7 @@
         },
         {
             "executable": "aerofly_fs_2.exe",
-            "id": 31,
+            "id": 32,
             "name": "Aerofly FS 2 Flight Simulator - v2.4.9.31",
             "notification_type": "Deletion",
             "path": "G:\\SteamLibrary\\steamapps\\common\\Aerofly FS 2 Flight Simulator\\bin64",
@@ -21,34 +21,34 @@
         },
         {
             "executable": "X-Plane.exe",
-            "id": 32,
-            "name": "X-Plane - v11.0.50.29",
+            "id": 33,
+            "name": "X-Plane - v11.0.50.31",
             "notification_type": "Creation",
             "path": "G:\\SteamLibrary\\steamapps\\common\\X-Plane 11",
             "profile_id": 2
         },
         {
             "executable": "X-Plane.exe",
-            "id": 33,
-            "name": "X-Plane - v11.0.50.29",
+            "id": 34,
+            "name": "X-Plane - v11.0.50.31",
             "notification_type": "Deletion",
             "path": "G:\\SteamLibrary\\steamapps\\common\\X-Plane 11",
             "profile_id": 2
         },
         {
-            "executable": "Santa Simulator.exe",
-            "id": 34,
-            "name": "No Product Info - v2018.2.5.29137",
+            "executable": "FlightSimulator.exe",
+            "id": 35,
+            "name": "No Product Info - v1.7.12.0",
             "notification_type": "Creation",
-            "path": "I:\\Steam\\steamapps\\common\\Santa Simulator",
+            "path": "I:\\Steam\\steamapps\\common\\MicrosoftFlightSimulator",
             "profile_id": 2
         },
         {
-            "executable": "Santa Simulator.exe",
-            "id": 35,
-            "name": "No Product Info - v2018.2.5.29137",
+            "executable": "FlightSimulator.exe",
+            "id": 36,
+            "name": "No Product Info - v1.7.12.0",
             "notification_type": "Deletion",
-            "path": "I:\\Steam\\steamapps\\common\\Santa Simulator",
+            "path": "I:\\Steam\\steamapps\\common\\MicrosoftFlightSimulator",
             "profile_id": 2
         }
     ],
@@ -112,16 +112,16 @@
                 },
                 {
                     "id": 12,
-                    "name": "Santa Simulator not running",
+                    "name": "Flight Simulator not running",
                     "order": 2,
                     "process": {
-                        "executable": "Santa Simulator.exe",
-                        "id": 36,
+                        "executable": "FlightSimulator.exe",
+                        "id": 30,
                         "name": "Process",
                         "notification_type": "Creation",
-                        "path": "I:\\Steam\\steamapps\\common\\Santa Simulator"
+                        "path": "I:\\Steam\\steamapps\\common\\MicrosoftFlightSimulator"
                     },
-                    "process_id": 36,
+                    "process_id": 30,
                     "running": false,
                     "task_id": 9
                 }
@@ -151,6 +151,28 @@
                 "path": "C:\\Program Files (x86)\\VoiceAttack"
             },
             "process_id": 27,
+            "profile_id": 2,
+            "stop": false,
+            "wnd_active": true,
+            "wnd_minimized": false
+        },
+        {
+            "active": true,
+            "allow_multiple_instances": false,
+            "command": "",
+            "conditions": [],
+            "cwd": "",
+            "gates": [],
+            "id": 10,
+            "name": "Start Track-IR",
+            "process": {
+                "executable": "TrackIR5.exe",
+                "id": 37,
+                "name": "Process",
+                "notification_type": "Creation",
+                "path": "C:\\Program Files (x86)\\NaturalPoint\\TrackIR5"
+            },
+            "process_id": 37,
             "profile_id": 2,
             "stop": false,
             "wnd_active": true,

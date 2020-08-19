@@ -66,7 +66,7 @@ class ExecutableFields(QObject):
         self.path = path
         self.icon_label = icon_label
 
-        self.path_util = SetDirectoryPath(self, mode='file',
+        self.path_util = SetDirectoryPath(self.parent, mode='file',
                                           line_edit=path_line_edit, tool_button=path_btn,
                                           reject_invalid_path_edits=False)
         self.path_util.path_changed.connect(self.set_executable)

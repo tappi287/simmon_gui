@@ -47,6 +47,12 @@
     "executable": "Santa Simulator.exe",
     "exe_sub_path": ""
   },
+  "1250410": {
+    "name": "Microsoft Flight Simulator",
+    "installdir": "MicrosoftFlightSimulator",
+    "executable": "FlightSimulator.exe",
+    "exe_sub_path": ""
+  },
   "223750": {
     "name": "DCS World Steam Edition",
     "installdir": "DCSWorld",

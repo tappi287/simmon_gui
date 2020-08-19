@@ -93,7 +93,10 @@ class TaskManager:
         # -- Start process
         #    and add current working directory
         logging.debug('Window ShowWindow Flag: %s', info.wShowWindow)
-        subprocess.Popen(command, cwd=task.cwd or None, startupinfo=info)
+        try:
+            subprocess.Popen(command, cwd=task.cwd or None, startupinfo=info)
+        except OSError as e:
+            logging.error('Could not start executable. Probably higher privileges are required. %s', e)
 
         time.sleep(0.1)
 
