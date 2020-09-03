@@ -71,3 +71,7 @@ def get_log_dir() -> str:
 
 
 SQLALCHEMY_DATABASE_URI = f'sqlite:///{get_settings_dir().resolve().as_posix()}\\{SETTINGS_DIR_NAME}.sqlite3'
+
+
+def get_database_url():
+    return SQLALCHEMY_DATABASE_URI
