@@ -5,7 +5,7 @@ M$ Windows application profiler running in the background to tame Simulation gam
 sims. Start any follow up application when the start of your Sim application is detected.
 
 <p align="center">
-    <img src="ui/screenshot_075.png" alt="Screenshot" width="600">
+    <img src="ui/screenshot_092.png" alt="Screenshot Version 0.92" width="600">
 </p>
 
 #### Usage
