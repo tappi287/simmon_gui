@@ -4,7 +4,7 @@
 import json
 import logging
 import winreg as registry
-from pathlib import Path
+from pathlib import Path, WindowsPath
 from typing import Iterable, List, Optional, Tuple
 
 from . import acf
@@ -133,8 +133,14 @@ class SteamApps:
                 if callable(method):
                     entry_dict['installdir'] = method(*args)
                     if entry_dict['installdir'] is not None:
-                        entry_dict['path'] = Path(Path(entry_dict['installdir']) /
-                                                  entry_dict['exe_sub_path']).as_posix()
+                        try:
+                            install_dir = Path(entry_dict['installdir'])
+                            if not install_dir.is_dir():
+                                install_dir = install_dir.parent
+                            entry_dict['installdir'] = str(WindowsPath(install_dir))
+                            entry_dict['path'] = Path(install_dir / entry_dict['exe_sub_path']).as_posix()
+                        except Exception as e:
+                            logging.error('Error locating installation path: %s', e)
                     else:
                         entry_dict['path'] = ''
 
@@ -151,7 +157,7 @@ class KnownAppsMethods:
         return cls.find_by_registry_keys(*args, user_reg=True)
 
     @staticmethod
-    def find_by_registry_keys(keys: Iterable, key_name: str, user_reg: bool = False) -> Optional[str]:
+    def find_by_registry_keys(keys: Iterable, key_name: Optional[str], user_reg: bool = False) -> Optional[str]:
         key = None
         reg = registry.HKEY_CURRENT_USER if user_reg else registry.HKEY_LOCAL_MACHINE
 
@@ -167,6 +173,8 @@ class KnownAppsMethods:
 
         try:
             value = registry.QueryValueEx(key, key_name)[0]
+            value = value.replace('"', '')  # Remove quotes
+            value = value.split(' ')[0]     # Remove parameters/arguments
             return value
         except FileNotFoundError as e:
             logging.error('Could not locate value in key %s: %s', key_name, e)

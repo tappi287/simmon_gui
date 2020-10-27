@@ -12,6 +12,8 @@ from ui import gui_resource
 
 VERSION = '0.92'
 
+# TODO: add auto-app-location detection to file import
+# TODO: update all matching executables if one process entry is updated in GUI
 # TODO: try to stop processes with close/exit signal rather than terminating it
 
 

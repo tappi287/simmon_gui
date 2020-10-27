@@ -17,11 +17,25 @@
     "executable": "rFactor2.exe",
     "exe_sub_path": "Bin64/"
   },
+  "211500": {
+    "name": "RaceRoom Racing Experience",
+    "installdir": "raceroom racing experience",
+    "executable": "RRRE64.exe",
+    "exe_sub_path": "Game/x64/"
+  },
   "1066890": {
     "name": "Automobilista 2",
     "installdir": "Automobilista 2",
     "executable": "AMS2AVX.exe",
     "exe_sub_path": ""
+  },
+  "Live for Speed": {
+    "name": "Live for Speed",
+    "installdir": "",
+    "executable": "LFS.exe",
+    "exe_sub_path": "",
+    "simmon_method": "find_by_registry_keys_current_user",
+    "simmon_method_args": [["SOFTWARE\\Classes\\lfs\\Shell\\Open\\Command"], null]
   },
   "359320": {
     "name": "Elite Dangerous",
