@@ -43,6 +43,11 @@ class ProfileImportExport:
         if not isinstance(entry, Process):
             return
 
+        # Do not alter entries that already have a valid path
+        exe_path = Path(Path(entry.path) / entry.executable)
+        if exe_path.is_file() and exe_path.exists():
+            return
+
         if entry.executable in cls.known_app_executables:
             manifest = cls.known_app_executables.get(entry.executable)
             path = Path(manifest.get('path') or '')

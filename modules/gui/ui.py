@@ -245,10 +245,19 @@ class SimmonUi(QMainWindow):
         m = GenericMsgBox(self, 'Error', f'Could not open file: {file}')
 
         if path_exists(file):
-            if not ProfileImportExport.import_profile(Path(file)):
+            ProfileImportExport.auto_detected_msg_ls = list()
+
+            if not ProfileImportExport.import_profile(Path(file), use_known_apps=True):
                 m.setText('Error while importing Profile!')
                 m.exec_()
                 return
+
+            if ProfileImportExport.auto_detected_msg_ls:
+                m.setWindowTitle('Auto detection')
+                m.setText(f'SimMon automatically detected local install locations:<br /><br />'
+                          f'{"<br />".join(set(ProfileImportExport.auto_detected_msg_ls))}<br /><br />'
+                          f'Conditions and Process entries have been updated...')
+                m.exec_()
         else:
             m.exec_()
             return
