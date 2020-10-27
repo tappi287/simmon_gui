@@ -173,8 +173,14 @@ class KnownAppsMethods:
 
         try:
             value = registry.QueryValueEx(key, key_name)[0]
-            value = value.replace('"', '')  # Remove quotes
-            value = value.split(' ')[0]     # Remove parameters/arguments
+
+            # -- Remove quotes
+            value = value.replace('"', '')
+
+            # -- Remove parameters/arguments %1 %2
+            while "%" in value:
+                value = value.rsplit(' ', 1)[0]
+
             return value
         except FileNotFoundError as e:
             logging.error('Could not locate value in key %s: %s', key_name, e)

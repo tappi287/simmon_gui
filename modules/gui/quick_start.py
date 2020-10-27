@@ -65,7 +65,8 @@ class QuickStartTab(QWidget):
 
             # -- Highlight Known Apps
             for col in range(t.columnCount()):
-                t.item(row, col).setBackground(QColor(224, 255, 221))
+                if path.exists():
+                    t.item(row, col).setBackground(QColor(224, 255, 221))
 
         # -- Steam Apps
         s.steam_apps.pop(STEAM_LIBRARY_FOLDERS)

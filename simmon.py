@@ -10,8 +10,9 @@ from shared_modules.globals import APP_FRIENDLY_NAME
 from shared_modules.migrate import db_engine, db_session
 from ui import gui_resource
 
-VERSION = '0.93'
+VERSION = '0.94'
 
+# TODO: add executable/cmd param to shutdown watcher prior to installation
 # TODO: update all matching executables if one process entry is updated in GUI
 # TODO: try to stop processes with close/exit signal rather than terminating it
 
