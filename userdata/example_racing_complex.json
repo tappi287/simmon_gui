@@ -282,7 +282,7 @@
                 },
                 {
                     "id": 27,
-                    "name": "RRE running",
+                    "name": "RRE not running",
                     "order": 3,
                     "process": {
                         "executable": "RRRE64.exe",
@@ -292,7 +292,7 @@
                         "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\raceroom racing experience\\Game\\x64"
                     },
                     "process_id": 67,
-                    "running": true,
+                    "running": false,
                     "task_id": 13
                 }
             ],
