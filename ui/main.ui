@@ -88,6 +88,13 @@
           </spacer>
          </item>
          <item>
+          <widget class="QPushButton" name="watcherInstallBtn">
+           <property name="text">
+            <string>Install</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="watcherUpdateBtn">
            <property name="text">
             <string>Update</string>
@@ -110,6 +117,16 @@
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QLabel" name="watcherNotice">
+         <property name="text">
+          <string>You need to install the background watcher for this application to work. Click the install button above. The window you see here is just the configuration GUI and can be safely closed once you installed the watcher and configured your Profiles!</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -131,7 +148,7 @@
      <x>0</x>
      <y>0</y>
      <width>942</width>
-     <height>18</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

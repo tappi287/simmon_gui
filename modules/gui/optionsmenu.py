@@ -3,7 +3,7 @@ from pathlib import Path, WindowsPath
 from subprocess import Popen
 from typing import Optional
 
-from qtpy.QtWidgets import QAction, QMenu
+from qtpy.QtWidgets import QAction, QMenu, QPushButton
 
 from shared_modules.globals import APP_NAME, FROZEN, WATCHER_EXE_NAME, WIN_AUTOSTART_DIR, \
     get_current_modules_dir
@@ -30,6 +30,10 @@ class OptionsMenu(QMenu):
         self.install_action.setStatusTip('Creates or removes a task that will run the Watchman at Windows user logon')
         self.install_action.toggled.connect(self.toggle_watcher_installation)
 
+        # -- Bind Ui toggle button to menu action
+        self.ui.watcherInstallBtn.released.connect(self.install_action.toggle)
+        self.toggle_ui_install_button()
+
         self.addAction(self.install_action)
 
     def toggle_watcher_installation(self, checked):
@@ -37,6 +41,16 @@ class OptionsMenu(QMenu):
             self.install_watcher_task()
         else:
             uninstall_watcher_task()
+        self.toggle_ui_install_button()
+
+    def toggle_ui_install_button(self):
+        """ Show/Hide install button and notice """
+        if self.install_action.isChecked():
+            self.ui.watcherNotice.setVisible(False)
+            self.ui.watcherInstallBtn.setText('Uninstall')
+        else:
+            self.ui.watcherNotice.setVisible(True)
+            self.ui.watcherInstallBtn.setText('Install')
 
     def uncheck_install_action(self):
         """ Uncheck action without emitting a toggle signal """

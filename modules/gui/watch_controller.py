@@ -62,6 +62,7 @@ class WatcherController(QObject):
         self.update_button.setEnabled(False)
         self.stop_button.setEnabled(False)
         self.start_button.setEnabled(False)
+        self.ui.watcherInstallBtn.setEnabled(False)
 
         if share == b'RUN_':
             self.status_label.setText('Watchman <span style="color: green;">active</span>')
@@ -76,6 +77,7 @@ class WatcherController(QObject):
         elif share is None:
             self.status_label.setText('Watchman <i>not</i> running')
             self.start_button.setEnabled(True)
+            self.ui.watcherInstallBtn.setEnabled(True)
         else:
             self.status_label.setText('Status could <span style="color: red;">not</span> be detected')
             self.start_button.setEnabled(True)
