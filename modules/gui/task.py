@@ -148,8 +148,7 @@ class TaskWidget(QWidget):
     def refresh_conditions(self, task: Task):
         while self.condition_buttons:
             condition_btn: ConditionButton = self.condition_buttons[-1]
-            self.remove_condition_widget(condition_btn)
-            self.remove_db_condition_entry(condition_btn.widget.db_id)
+            self.remove_condition_widget(condition_btn, user_interaction=False)
 
         # Sort Conditions and Gates
         def k(e): return e.order
@@ -208,7 +207,7 @@ class TaskWidget(QWidget):
 
         return g
 
-    def remove_condition_widget(self, condition_btn: ConditionButton):
+    def remove_condition_widget(self, condition_btn: ConditionButton, user_interaction=True):
         """ Remove the widget -NOT- the db entry """
         cnd_idx = self.condition_buttons.index(condition_btn)
         self.condition_buttons.pop(cnd_idx)
@@ -220,6 +219,13 @@ class TaskWidget(QWidget):
 
         if self.condition_buttons:
             self.remove_gate_widget(cnd_idx)
+
+        # - Make sure we display conditions and gates in right order
+        #   upon user delete action.
+        #   Will re-create all condition+gate widgets.
+        if user_interaction:
+            task = self.ui.session.query(Task).get(self.db_id)
+            self.refresh_conditions(task)
 
     def update_condition_order(self):
         """ Update Condition Order based on position of condition buttons """
