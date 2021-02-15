@@ -30,7 +30,7 @@ class LogViewerWindow(QDialog):
         self.refreshBtn.released.connect(self.refresh)
 
         self.auto_refresh = QTimer(self)
-        self.auto_refresh.setInterval(5000)
+        self.auto_refresh.setInterval(60000)
         self.auto_refresh.timeout.connect(self.refresh)
         self.auto_refresh.start()
 

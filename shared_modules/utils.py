@@ -147,7 +147,7 @@ class CheckConditionsGated:
         return False
 
     @classmethod
-    def check_conditions(cls, conditions: List[bool], gates_ls: List[Gate]):
+    def check_conditions(cls, conditions: List[bool], gates_ls: List[Gate], debug_conditions: bool = False):
         if len(conditions) == 1:
             return conditions[0]
 
@@ -160,7 +160,8 @@ class CheckConditionsGated:
         prev_condition, current_gate = None, None
         last_result, overall_result, idx = False, True, 0
 
-        cls.print_condition_overview(condition_gate_ls)
+        if debug_conditions:
+            cls.print_condition_overview(condition_gate_ls)
 
         for c in condition_gate_ls:
             if isinstance(c, Gate):
@@ -173,8 +174,9 @@ class CheckConditionsGated:
 
             current_result = cls._check_condition_gate(prev_condition, c, current_gate)
             idx += 1
-            logging.debug(
-                f"#{idx} {prev_condition} {'AND' if current_gate.value else 'OR'} {c} = {current_result}")
+            if debug_conditions:
+                logging.debug(
+                    f"#{idx} {prev_condition} {'AND' if current_gate.value else 'OR'} {c} = {current_result}")
             prev_condition = current_result
             overall_result = current_result
 
