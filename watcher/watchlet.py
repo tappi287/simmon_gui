@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import threading
 import time
@@ -21,7 +22,6 @@ class Watchlet(threading.Thread):
         self.exit_event = exit_event
 
     def run(self) -> None:
-        last_event_time = time.time() - self.watcher_timeout_secs
         process_names = {p.executable for p in self.process_list}
 
         # -- Create a watcher thread
@@ -37,34 +37,49 @@ class Watchlet(threading.Thread):
 
         logging.debug('Started Watchlet for %s - %s', self.notification_type, process_names)
 
-        # -- Break queue watching in between watcher restarts
-        #    to listen for a global exit event
-        queue_timeout = self.watcher_timeout_secs / 2
-
         # -- Wait for a watch result matching a profile
         pythoncom.CoInitialize()  # Do not do this in python main thread!
         try:
-            while not self.exit_event.is_set():
-                try:
-                    process_name, process_id = watcher_queue.get(timeout=queue_timeout)
-                    logging.debug('Watchlet received queue entry: %s, %s', process_name, process_id)
-
-                    # Skip doubled events from the two threads within watcher timeout
-                    if (time.time() - last_event_time) < self.watcher_timeout_secs:
-                        logging.debug('Skipping doubled event occurrence of %s', process_name)
-                        continue
-
-                    last_event_time = time.time()
-                    tasks_started = TaskManager.find_tasks(process_name, process_id)
-                    if not tasks_started:
-                        logging.info('No active Tasks found to execute.')
-                except Empty:
-                    pass
+            asyncio.run(self.watch_loop(watcher_queue))
+        except Exception as e:
+            logging.fatal('Error running watchlet watch loop: %s', e)
         finally:
             pythoncom.CoUninitialize()
 
         # -- Join watcher thread
         self.end_watcher((watcher_thread, watcher_thread_two), watcher_exit_event)
+
+    async def watch_loop(self, watcher_queue: Queue):
+        last_event_time = time.time() - self.watcher_timeout_secs
+
+        # - Prepare empty check_tasks task to create an awaitable dummy
+        #   for the first loop iteration
+        async def empty_task():
+            return False
+        check_tasks_task = asyncio.create_task(empty_task())
+
+        # -- Break queue watching in between watcher restarts
+        #    to listen for a global exit event
+        queue_timeout = self.watcher_timeout_secs / 2
+
+        while not self.exit_event.is_set():
+            try:
+                process_name, process_id = watcher_queue.get(timeout=queue_timeout)
+                logging.debug('Watchlet received queue entry: %s, %s', process_name, process_id)
+
+                # Await last task result
+                if not await check_tasks_task:
+                    logging.info('No active Tasks found to execute in last run.')
+
+                # Skip doubled events from the two threads within watcher timeout
+                if (time.time() - last_event_time) < self.watcher_timeout_secs:
+                    logging.debug('Skipping doubled event occurrence of %s', process_name)
+                    continue
+
+                last_event_time = time.time()
+                check_tasks_task = asyncio.create_task(TaskManager.find_tasks(process_name, process_id))
+            except Empty:
+                pass
 
     @staticmethod
     def _create_watcher(process_names: set, notification_type: str, queue: Queue = None, event: threading.Event = None):

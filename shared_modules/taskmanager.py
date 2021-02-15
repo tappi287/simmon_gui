@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import shlex
 import subprocess
@@ -14,8 +15,10 @@ from .migrate import Session
 
 
 class TaskManager:
+    debug_conditions = False
+
     @classmethod
-    def find_tasks(cls, p_name: str, pid: str) -> bool:
+    async def find_tasks(cls, p_name: str, pid: str) -> bool:
         """ Find all tasks activated by the created process """
         logging.info('Found %s, %s', p_name, pid)
 
@@ -31,11 +34,17 @@ class TaskManager:
             tasks += profile.tasks
 
         # -- Find tasks whose conditions are met
-        activated_tasks = list()
-        for task in tasks:
-            logging.debug('Checking task: %s', task.name)
-            if cls._check_task_conditions(task):
-                activated_tasks.append(task)
+        num_tries, activated_tasks, log_level = 2, list(), logging.DEBUG
+        while (num_tries := num_tries - 1) >= 0 and not activated_tasks:
+            for task in tasks:
+                logging.debug('Run #%s Checking task: %s', 2-num_tries, task.name)
+
+                if cls._check_task_conditions(task):
+                    activated_tasks.append(task)
+
+            # - Sometimes exiting processes take a while to be recognized as "not running"
+            #   try two times if we did not found a activated task before
+            await asyncio.sleep(10)
 
         cls._execute_tasks(activated_tasks)
 
@@ -133,7 +142,7 @@ class TaskManager:
             return False
 
         results = list()
-        d = {False: 'is not runnning', True: 'is running'}
+        d = {False: 'is not running', True: 'is running'}
 
         # -- Check that task executable exists
         task_executable_path = Path(task.process.path) / task.process.executable
@@ -165,12 +174,12 @@ class TaskManager:
                 condition.running == process_running
                 )
 
-            if condition.running == process_running:
+            if condition.running == process_running and TaskManager.debug_conditions:
                 logging.debug(f'Task {task.name} condition "if {condition.process.executable} {d[condition.running]}"'
                               f' met: {condition.process.executable} {d[process_running]}.')
-            else:
+            elif TaskManager.debug_conditions:
                 logging.debug(f'Task {task.name} condition "if {condition.process.executable} {d[condition.running]}"'
                               f' NOT met: {condition.process.executable} {d[process_running]}.')
 
         gates = [g for g in task.gates]
-        return CheckConditionsGated.check_conditions(results, gates)
+        return CheckConditionsGated.check_conditions(results, gates, TaskManager.debug_conditions)
