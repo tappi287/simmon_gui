@@ -34,5 +34,6 @@ coll = COLLECT(exe,
                a.datas,
                strip=False,
                upx=True,
-               upx_exclude=['cprocessors.cp38*.pyd', 'cresultproxy.cp38*.pyd', 'cutils.cp38*.pyd', '_sqlite3.pyd'],
+               upx_exclude=['cprocessors.cp38*.pyd', 'cresultproxy.cp38*.pyd', 'cutils.cp38*.pyd', '_sqlite3.pyd',
+                            'vcruntime140.dll'],
                name='simmon_watcher')

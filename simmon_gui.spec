@@ -49,5 +49,5 @@ coll = COLLECT(exe,
                strip=False,
                upx=False,
                upx_exclude=['cprocessors.cp38*.pyd', 'cresultproxy.cp38*.pyd', 'cutils.cp38*.pyd', '_sqlite3.pyd',
-                            'shiboken*.dll', 'python*.dll'],
+                            'shiboken*.dll', 'python*.dll', 'vcruntime140.dll'],
                name=APP_NAME)
